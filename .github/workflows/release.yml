@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Build binaries
+        run: |
+          LDFLAGS="-s -w"
+          GOOS=darwin GOARCH=arm64 go build -ldflags="$LDFLAGS" -o bsky-spy-darwin-arm64 .
+          GOOS=darwin GOARCH=amd64 go build -ldflags="$LDFLAGS" -o bsky-spy-darwin-amd64 .
+          GOOS=linux GOARCH=amd64 go build -ldflags="$LDFLAGS" -o bsky-spy-linux-amd64 .
+          GOOS=linux GOARCH=arm64 go build -ldflags="$LDFLAGS" -o bsky-spy-linux-arm64 .
+          GOOS=windows GOARCH=amd64 go build -ldflags="$LDFLAGS" -o bsky-spy-windows-amd64.exe .
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            bsky-spy-darwin-arm64
+            bsky-spy-darwin-amd64
+            bsky-spy-linux-amd64
+            bsky-spy-linux-arm64
+            bsky-spy-windows-amd64.exe
+          generate_release_notes: true
