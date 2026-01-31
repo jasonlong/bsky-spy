@@ -46,6 +46,10 @@ bsky-spy -n "Design Inspiration" designer.bsky.social
 
 The list appears in your profile under **Lists** and can be used as a custom feed.
 
+## Note on list feeds
+
+Newly created lists may appear empty at first. Bluesky's backend needs time to index the list, and in some cases the feed only starts showing posts made after the list was created. This is a Bluesky platform behavior, not a bug in this tool. Give it some time and the feed should populate.
+
 ## Building from source
 
 ```bash
